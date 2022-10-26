@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English words learning</title>
+</head>
+<style>
+    @media(max-width: 450px){
+        
+        body{
+            font-size: 1.2em;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #text_input {
+            position: relative;
+            left: 1%;
+            width: 90%;
+        }
+
+        #translating-word {
+            width: 100%;
+        }
+
+        #butt {
+            position: relative;
+            width: 50%;
+            left: 25%;
+            top: 20px;
+            margin-bottom: 30px;
+        }
+    }
+</style>
+<body>
+    
+    <h1>Translate the word</h1>
+    <h3>1000 most used english words</h3>
+    <span>Choose letter: </span>
+    <select id="select">
+        <option value="a">a</option>
+        <option value="b">b</option>
+        <option value="c">c</option>
+        <option value="d">d</option>
+        <option value="e">e</option>
+        <option value="f">f</option>
+        <option value="g">g</option>
+        <option value="h">h</option>
+        <option value="i">i</option>
+        <option value="j">j</option>
+        <option value="k">k</option>
+        <option value="l">l</option>
+        <option value="m">m</option>
+        <option value="n">n</option>
+        <option value="o">o</option>
+        <option value="p">p</option>
+        <option value="q">q</option>
+        <option value="r">r</option>
+        <option value="s">s</option>
+        <option value="t">t</option>
+        <option value="u">u</option>
+        <option value="v">v</option>
+        <option value="w">w</option>
+        <option value="y">y</option>
+        <option value="any" selected>random</option>
+    </select>
+    <br>
+    <span id="words_count">Number of words starting with the letter</span>
+    <br><br>
+    
+    <p id="translating-word"></p>
+   
+    <input type="text" id="text_input">
+    <input id="butt" type="button" value="Check" onclick="clickbtn()"/><br>
+   
+    <span id="result"></span> <br>
+    <a></span>
+    <a href="" id="explanation_word" target="_blank">I don't know this word</a>
+    <iframe src="https://context.reverso.net/translation/english-ukrainian/last" style="border:none; width: 1500px;" title="Iframe Example"></iframe>
+
+</body>
+
+<script>
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
+    let rand_word; // генерируется число в заданном диапазоне, используется как индекс в массиве arr
+    let arr = []; // массив для отображения данных
+    let DB; // массив распаковки JSON файло
+    let current_letter = "any"; // позволяет выбирать текущую букву
+    let letter; // переменная которая содержит ключ DB (букву с которой начинается слово)
+
+    let alphabet = 'abcdefghijklmnopqrstuvwy'.split(''); 
+    
+    // обработка селектора букв
+    let select = document.querySelector('#select');
+    select.addEventListener('change', function(){
+        current_letter = this.value;
+        reload_word()
+    });
+
+    // ф-ция обновления
+    function reload_word(){
+        arr = [];
+        if (current_letter == "any") {
+            letter = alphabet[getRandomInt(alphabet.length)];
+        } 
+        else {
+            letter = current_letter;
+        }
+
+        for (var word in DB[letter]) {
+            arr.push(word);
+            //console.log(DB[key]);
+        }   
+        rand_word = getRandomInt(arr.length)
+
+        document.getElementById('translating-word').innerHTML = DB[letter][arr[rand_word]]; // отображает перевод слова
+        document.getElementById("text_input").value = ""; 
+        document.getElementById('explanation_word').href = "https://context.reverso.net/translation/english-ukrainian/" + arr[rand_word];
+        document.getElementById('words_count').innerHTML = 'Number of words starting with the letter "' + letter + '": ' + arr.length;
+        document.getElementById('result').innerHTML = "";
+        if (current_letter == "any") {
+            document.getElementById('words_count').innerHTML = 'Number of words: ' + arr.length;
+        }
+
+    }   
+
+    (async () => {
+        DB = await(await fetch('dictionary.json')).json();
+        reload_word();
+    })();
+
+    function clickbtn() {
+        var val = document.getElementById('text_input').value;
+        if (val == arr[rand_word]){
+            document.getElementById('result').innerHTML = "Right!";
+            document.getElementById('result').style.color = 'green';
+            setTimeout(function() {reload_word()}, 800);
+        } 
+        else {
+            document.getElementById('result').innerHTML = "Wrong!";
+            document.getElementById('result').style.color = 'red';
+        }
+    };   
+
+</script>
+</html>

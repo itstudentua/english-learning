@@ -1,0 +1,19 @@
+{
+    "a": {
+        "able": {
+            "translate": "здатний",
+            "examples": "I thought I was still able.-"
+        }            
+    },
+    
+    "b": {
+        "began": "почався", "begin": "почати", "behind": "ззаду", "believe": "вірити"
+    }, 
+    
+    "c": {
+        "call": "виклик", "calm": "спокійний", "came": "прийшов"
+    },
+    "d": {
+        "dad": "тато", "damn": "блін", "dance": "танець", "dark": "темний", "date": "дата"
+    }
+}
